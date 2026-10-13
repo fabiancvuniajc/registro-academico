@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: RegistroAcademico
+  datasource:
+    url: jdbc:postgresql://ep-damp-firefly-au60mply-pooler.c-10.us-east-1.aws.neon.tech/neondb
+    username: neondb_owner
+    password: npg_tc03YsmZkFDV
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+
+#springdoc.swagger-ui.path=/swagger-ui.html
+#springdoc.swagger-ui.groups.enabled=true
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html # URL para acceder a la UI
+    groups:
+      enabled: true
+  api-docs:
+    path: /v3/api-docs # URL para la especificación JSON/YAML
+  version: 1.0.0
+  info:
+    title: API Registro Academico
+    description: Documentación de la API para la gestión de estudiantes.
+    version: 1.0.0
+    contact:
+      name: Tu Nombre
+      email: tu.email@example.com
+    license:
+      name: Apache 2.0
+      url: http://springdoc.org
