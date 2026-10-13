@@ -8,6 +8,10 @@ import com.example.registroacademico.infrastructure.adapters.in.rest.mappers.Est
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +38,16 @@ public class EstudianteController {
     @Operation(summary = "Consulta de estudiantes", description = "Consulta de estudiantes universitarios")
     @ApiResponse(responseCode = "200", description = "Consulta de estudiantes exitosa")
     @ApiResponse(responseCode = "503", description = "Error interno")
-    public ResponseEntity<List<EstudianteResponse>> listar() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(estudianteUseCase.listar()
-                        .stream()
-                        .map(EstudianteMapper.INSTANCE::toEstudianteResponse)
+    public ResponseEntity<Page<EstudianteResponse>> listar(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return ResponseEntity.ok(
+                estudianteUseCase.listar(pageable)
+                        .map(EstudianteMapper.INSTANCE::toEstudianteResponse));
                         /*.map(this::toEstudianteResponse)
                         .map(estudiante -> {
                             EstudianteResponse estudianteResponse = new EstudianteResponse();
@@ -47,8 +55,8 @@ public class EstudianteController {
                             estudianteResponse.setDocumento(estudiante.getDocumento());
                             estudianteResponse.setEmail(estudiante.getEmail());
                             return estudianteResponse;
-                        })*/
-                        .toList());
+                        }).toList());*/
+
     }
 
     @PostMapping

@@ -5,6 +5,8 @@ import com.example.registroacademico.domain.models.Estudiante;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.entities.EstudianteEntity;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.mappers.EstudianteMapper;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.repositories.EstudianteJpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,11 +21,9 @@ public class PostqresqlAdapter implements EstudianteRepository {
     }
 
     @Override
-    public List<Estudiante> getAll() {
-        return estudianteJpaRepository.findAll()
-                .stream()
-                .map(EstudianteMapper.INSTANCE::toEstudiante)
-                .toList();
+    public Page<Estudiante> getAll(Pageable pageable) {
+        return estudianteJpaRepository.findAll(pageable)
+                .map(EstudianteMapper.INSTANCE::toEstudiante);
     }
 
     @Override

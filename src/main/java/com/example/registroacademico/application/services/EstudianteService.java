@@ -3,6 +3,8 @@ package com.example.registroacademico.application.services;
 import com.example.registroacademico.application.ports.in.EstudianteUseCase;
 import com.example.registroacademico.application.ports.out.EstudianteRepository;
 import com.example.registroacademico.domain.models.Estudiante;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,9 @@ public class EstudianteService implements EstudianteUseCase {
     }
 
     @Override
-    public List<Estudiante> listar() {
-        return estudianteRepository.getAll();
+    public Page<Estudiante> listar(Pageable pageable) {
+
+        return estudianteRepository.getAll(pageable);
     }
 
     @Override
