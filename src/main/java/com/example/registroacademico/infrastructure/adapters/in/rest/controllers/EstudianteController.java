@@ -8,6 +8,7 @@ import com.example.registroacademico.infrastructure.adapters.in.rest.mappers.Est
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,7 +61,7 @@ public class EstudianteController {
     }
 
     @PostMapping
-    public ResponseEntity<Estudiante> crear(@RequestBody CreateEstudianteRequest estudiante) {
+    public ResponseEntity<Estudiante> crear(@Valid @RequestBody CreateEstudianteRequest estudiante) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(estudianteUseCase.crear(

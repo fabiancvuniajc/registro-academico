@@ -1,6 +1,5 @@
 package com.example.registroacademico.infrastructure.adapters.out.persistence.entities;
 
-import com.example.registroacademico.domain.enums.Estados;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +36,5 @@ public class MatriculaEntity {
     @Column(name = "nota_final")
     private BigDecimal notaFinal;
 
-    @Enumerated(EnumType.STRING)
-    private Estados estado;
+    private String estado;
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,6 +29,7 @@ public class PostqresqlAdapter implements EstudianteRepository {
 
     @Override
     public Estudiante save(Estudiante estudiante) {
+        estudiante.setFechaCreacion(new Date());
         EstudianteEntity estudianteEntity = estudianteJpaRepository
                 .save(EstudianteMapper.INSTANCE.toEstudianteEntity(estudiante));
         return EstudianteMapper.INSTANCE.toEstudiante(estudianteEntity);
