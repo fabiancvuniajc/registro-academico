@@ -1,12 +1,11 @@
 package com.example.registroacademico.application.ports.in;
 
 import com.example.registroacademico.domain.models.Estudiante;
-
-import java.util.List;
+import com.example.registroacademico.domain.models.Wrapper;
 
 public interface EstudianteUseCase {
 
-    List<Estudiante> listar();
+    Wrapper<Estudiante> listar(int page, int size, String sortBy);
 
     //pasar todos los propiedaes de estudiante indivualmente
     //Estudiante crear(String nombre, String documento, String email, int edad);

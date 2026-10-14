@@ -3,6 +3,7 @@ package com.example.registroacademico.application.services;
 import com.example.registroacademico.application.ports.in.EstudianteUseCase;
 import com.example.registroacademico.application.ports.out.EstudianteRepository;
 import com.example.registroacademico.domain.models.Estudiante;
+import com.example.registroacademico.domain.models.Wrapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class EstudianteService implements EstudianteUseCase {
     }
 
     @Override
-    public List<Estudiante> listar() {
-        return estudianteRepository.getAll();
+    public Wrapper<Estudiante> listar(int page, int size, String sortBy) {
+        return estudianteRepository.getAll(page, size, sortBy);
     }
 
     @Override
