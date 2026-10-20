@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class EstudianteController {
     @Operation(summary = "Consulta de estudiantes", description = "Consulta de estudiantes universitarios")
     @ApiResponse(responseCode = "200", description = "Consulta de estudiantes exitosa")
     @ApiResponse(responseCode = "503", description = "Error interno")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<EstudianteResponse>> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -61,6 +63,7 @@ public class EstudianteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Estudiante> crear(@Valid @RequestBody CreateEstudianteRequest estudiante) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -69,6 +72,7 @@ public class EstudianteController {
     }
 
     @GetMapping("/{documento}")
+    @PreAuthorize("hasRole('ADMIN','Estudiante','PROFESOR')")
     public ResponseEntity<Estudiante> buscar(@PathVariable String documento) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -77,6 +81,7 @@ public class EstudianteController {
     }
 
     @PutMapping("/{documento}")
+    @PreAuthorize("hasRole('ADMIN','Estudiante')")
     public ResponseEntity<Estudiante> actualizar(@PathVariable String documento,
                                                  @RequestBody Estudiante estudiante) {
         return ResponseEntity
@@ -85,6 +90,7 @@ public class EstudianteController {
     }
 
     @DeleteMapping("/{documento}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> borrar(@PathVariable String documento) {
         estudianteUseCase.borrar(documento);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
