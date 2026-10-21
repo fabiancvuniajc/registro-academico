@@ -25,7 +25,8 @@ public class EstudianteService implements EstudianteUseCase {
     @Override
     public Estudiante crear(Estudiante estudiante) {
         // aplicaria las reglas de negocio requeridas antes de ir a crear
-        return estudianteRepository.save(estudiante);
+        Estudiante result = estudianteRepository.save(estudiante);
+        return result;
     }
 
     @Override

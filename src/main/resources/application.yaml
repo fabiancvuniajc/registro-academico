@@ -32,3 +32,9 @@ springdoc:
     license:
       name: Apache 2.0
       url: http://springdoc.org
+
+app:
+  security:
+    jwt:
+      secret: cambiar-este-secreto-por-uno-largo-y-seguro-min-256-bits
+      expiration-ms: 3600000   # 1 hora

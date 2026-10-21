@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class EstudianteController {
     @Operation(summary = "Consulta de estudiantes", description = "Consulta de estudiantes universitarios")
     @ApiResponse(responseCode = "200", description = "Consulta de estudiantes exitosa")
     @ApiResponse(responseCode = "503", description = "Error interno")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Wrapper<EstudianteResponse>> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
