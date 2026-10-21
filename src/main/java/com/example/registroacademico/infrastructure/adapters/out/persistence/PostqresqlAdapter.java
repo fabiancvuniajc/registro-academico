@@ -2,6 +2,7 @@ package com.example.registroacademico.infrastructure.adapters.out.persistence;
 
 import com.example.registroacademico.application.ports.out.EstudianteRepository;
 import com.example.registroacademico.domain.models.Estudiante;
+import com.example.registroacademico.domain.models.Wrapper;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.entities.EstudianteEntity;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.mappers.EstudianteMapper;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.repositories.EstudianteJpaRepository;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class PostqresqlAdapter implements EstudianteRepository {
@@ -22,9 +22,14 @@ public class PostqresqlAdapter implements EstudianteRepository {
     }
 
     @Override
-    public Page<Estudiante> getAll(Pageable pageable) {
-        return estudianteJpaRepository.findAll(pageable)
+    public Wrapper<Estudiante> getAll(Pageable pageable) {
+        Page<Estudiante> estudiantes = estudianteJpaRepository.findAll(pageable)
                 .map(EstudianteMapper.INSTANCE::toEstudiante);
+        return new Wrapper<>(estudiantes.getContent(),
+                (int) estudiantes.getTotalElements(),
+                estudiantes.getTotalPages(),
+                estudiantes.getSize(),
+                estudiantes.getNumberOfElements());
     }
 
     @Override

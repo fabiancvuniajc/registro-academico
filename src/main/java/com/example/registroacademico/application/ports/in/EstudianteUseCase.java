@@ -1,14 +1,12 @@
 package com.example.registroacademico.application.ports.in;
 
 import com.example.registroacademico.domain.models.Estudiante;
-import org.springframework.data.domain.Page;
+import com.example.registroacademico.domain.models.Wrapper;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface EstudianteUseCase {
 
-    Page<Estudiante> listar(Pageable pageable);
+    Wrapper<Estudiante> listar(Pageable pageable);
 
     //pasar todos los propiedaes de estudiante indivualmente
     //Estudiante crear(String nombre, String documento, String email, int edad);

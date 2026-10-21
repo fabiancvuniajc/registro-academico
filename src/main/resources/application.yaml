@@ -11,6 +11,22 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
+  data:
+    redis:
+      host: curtain-rod-tender-31617.db.redis.io
+      port: 16498
+      password: RjLFk5bZ9kDtntC35aMHgq1Z9ruEmxMt
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000
+      cache-null-values: false
+      use-key-prefix: true
 
 #springdoc.swagger-ui.path=/swagger-ui.html
 #springdoc.swagger-ui.groups.enabled=true

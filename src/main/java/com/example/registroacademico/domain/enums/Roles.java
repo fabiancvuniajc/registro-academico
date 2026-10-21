@@ -3,8 +3,8 @@ package com.example.registroacademico.domain.enums;
 public enum Roles {
     // 1. Definir las constantes pasando el número al constructor
     ROLE_ADMIN(1),
-    ROLE_ESTUDIANTE(2),
-    ROLE_PROFESOR(3); // Nota el punto y coma aquí
+    ROLE_PROFESOR(2),
+    ROLE_ESTUDIANTE(3); ; // Nota el punto y coma aquí
 
     // 2. Atributo privado para guardar el valor numérico
     private final int id;

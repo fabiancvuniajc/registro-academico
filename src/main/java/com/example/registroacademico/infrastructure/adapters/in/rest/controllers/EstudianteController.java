@@ -2,6 +2,7 @@ package com.example.registroacademico.infrastructure.adapters.in.rest.controller
 
 import com.example.registroacademico.application.ports.in.EstudianteUseCase;
 import com.example.registroacademico.domain.models.Estudiante;
+import com.example.registroacademico.domain.models.Wrapper;
 import com.example.registroacademico.infrastructure.adapters.in.rest.dto.CreateEstudianteRequest;
 import com.example.registroacademico.infrastructure.adapters.in.rest.dto.EstudianteResponse;
 import com.example.registroacademico.infrastructure.adapters.in.rest.mappers.EstudianteMapper;
@@ -41,16 +42,24 @@ public class EstudianteController {
     @ApiResponse(responseCode = "200", description = "Consulta de estudiantes exitosa")
     @ApiResponse(responseCode = "503", description = "Error interno")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<EstudianteResponse>> listar(
+    public ResponseEntity<Wrapper<EstudianteResponse>> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy
     ) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return ResponseEntity.ok(
-                estudianteUseCase.listar(pageable)
-                        .map(EstudianteMapper.INSTANCE::toEstudianteResponse));
+        Wrapper<Estudiante> estudiantes = estudianteUseCase.listar(pageable);
+        Wrapper<EstudianteResponse> estudiantesResponse = new Wrapper<>(
+                estudiantes.getResults().stream()
+                        .map(EstudianteMapper.INSTANCE::toEstudianteResponse)
+                        .toList(),
+                estudiantes.getTotalElements(),
+                estudiantes.getTotalPages(),
+                estudiantes.getSize(),
+                estudiantes.getNumberOfElements()
+        );
+        return ResponseEntity.ok(estudiantesResponse);
                         /*.map(this::toEstudianteResponse)
                         .map(estudiante -> {
                             EstudianteResponse estudianteResponse = new EstudianteResponse();
