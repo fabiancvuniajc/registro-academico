@@ -1,6 +1,7 @@
 package com.example.registroacademico.infrastructure.adapters.out.persistence;
 
 import com.example.registroacademico.application.ports.out.EstudianteRepository;
+import com.example.registroacademico.domain.exceptions.RecursoNoEncontradoException;
 import com.example.registroacademico.domain.models.Wrapper;
 import com.example.registroacademico.domain.models.Estudiante;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.entities.EstudianteEntity;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class PostqresqlAdapter implements EstudianteRepository {
@@ -49,29 +51,35 @@ public class PostqresqlAdapter implements EstudianteRepository {
 
     @Override
     public Estudiante findByDocument(String documento) {
-        EstudianteEntity estudianteEntity = estudianteJpaRepository.findByCodigoEstudiantil(documento);
-        return EstudianteMapper.INSTANCE.toEstudiante(estudianteEntity);
+        Optional<EstudianteEntity> estudianteEntity = estudianteJpaRepository.findByCodigoEstudiantil(documento);
+        if(estudianteEntity.isEmpty()){
+            throw new RecursoNoEncontradoException("No se encuentra estudiante con codigo estudiantil: "+ documento);
+        }
+        return EstudianteMapper.INSTANCE.toEstudiante(estudianteEntity.get());
     }
 
     @Override
     public Estudiante update(String documento, Estudiante estudiante) {
 
-        EstudianteEntity estudianteEntity = estudianteJpaRepository.findByCodigoEstudiantil(documento);
-        estudianteEntity.setNombres(estudiante.getNombres());
-        estudianteEntity.setApellidos(estudiante.getApellidos());
-        estudianteEntity.setFechaNacimiento(estudiante.getFechaNacimiento());
-        estudianteEntity.setFechaCreacion(estudiante.getFechaCreacion());
-        estudianteEntity.setEmail(estudiante.getEmail());
-        estudianteEntity.setCodigoEstudiantil(estudiante.getCodigoEstudiantil());
-        estudianteEntity.setEstado(estudiante.getEstado());
-        estudianteJpaRepository.save(estudianteEntity);
-        return EstudianteMapper.INSTANCE.toEstudiante(estudianteEntity);
+        Optional<EstudianteEntity> estudianteEntity = estudianteJpaRepository.findByCodigoEstudiantil(documento);
+        if(estudianteEntity.isEmpty()){
+            throw new RecursoNoEncontradoException("No se encuentra estudiante con codigo estudiantil: "+ documento);
+        }
+        estudianteEntity.get().setNombres(estudiante.getNombres());
+        estudianteEntity.get().setApellidos(estudiante.getApellidos());
+        estudianteEntity.get().setFechaNacimiento(estudiante.getFechaNacimiento());
+        estudianteEntity.get().setFechaCreacion(estudiante.getFechaCreacion());
+        estudianteEntity.get().setEmail(estudiante.getEmail());
+        estudianteEntity.get().setCodigoEstudiantil(estudiante.getCodigoEstudiantil());
+        estudianteEntity.get().setEstado(estudiante.getEstado());
+        estudianteJpaRepository.save(estudianteEntity.get());
+        return EstudianteMapper.INSTANCE.toEstudiante(estudianteEntity.get());
     }
 
     @Override
     public void deleteByDocument(String documento) {
-        EstudianteEntity estudianteEntity = estudianteJpaRepository.findByCodigoEstudiantil(documento);
-        estudianteJpaRepository.deleteById(estudianteEntity.getId());
+        Optional<EstudianteEntity> estudianteEntity = estudianteJpaRepository.findByCodigoEstudiantil(documento);
+        estudianteEntity.ifPresent(entity -> estudianteJpaRepository.deleteById(entity.getId()));
     }
 
     /*private Estudiante toEstudiante(EstudianteEntity estudianteEntity) {
