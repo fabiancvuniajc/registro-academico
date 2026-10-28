@@ -45,10 +45,11 @@ public class EstudianteController {
     public ResponseEntity<Wrapper<EstudianteResponse>> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "false") boolean refresh
     ) {
 
-        Wrapper<Estudiante> wrapper = estudianteUseCase.listar(page, size, sortBy);
+        Wrapper<Estudiante> wrapper = estudianteUseCase.listar(page, size, sortBy, refresh);
 
         List<EstudianteResponse> list = wrapper.getResult().stream()
                 .map(EstudianteMapper.INSTANCE::toEstudianteResponse)

@@ -5,7 +5,7 @@ import com.example.registroacademico.domain.models.Wrapper;
 
 public interface EstudianteUseCase {
 
-    Wrapper<Estudiante> listar(int page, int size, String sortBy);
+    Wrapper<Estudiante> listar(int page, int size, String sortBy, boolean refresh);
 
     //pasar todos los propiedaes de estudiante indivualmente
     //Estudiante crear(String nombre, String documento, String email, int edad);
