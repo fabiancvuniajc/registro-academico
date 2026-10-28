@@ -6,6 +6,7 @@ import com.example.registroacademico.domain.models.Estudiante;
 import com.example.registroacademico.domain.models.Wrapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +27,10 @@ public class EstudianteService implements EstudianteUseCase {
         this.gson = gson;
     }
 
-    /*
-    @Override
-    public Wrapper<Estudiante> listar(int page, int size, String sortBy) {
+
+    /*@Override
+    @Cacheable(value = "estudiantes", key = "'all'", condition = "#refresh == false")
+    public Wrapper<Estudiante> listar(int page, int size, String sortBy, boolean refresh) {
         return estudianteRepository.getAll(page, size, sortBy);
     }*/
 
