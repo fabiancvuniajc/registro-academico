@@ -28,6 +28,16 @@ spring:
       cache-null-values: false
       use-key-prefix: true
 
+  rabbitmq:
+    addresses: amqps://clzapoxz:RsRbiNVq6Jf4zNe9-OwKzu_-0nxB819p@leopard.lmq.cloudamqp.com/clzapoxz
+    listener:
+      simple:
+        acknowledge-mode: auto
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: 3
+
 #springdoc.swagger-ui.path=/swagger-ui.html
 #springdoc.swagger-ui.groups.enabled=true
 springdoc:
@@ -54,3 +64,9 @@ app:
     jwt:
       secret: cambiar-este-secreto-por-uno-largo-y-seguro-min-256-bits
       expiration-ms: 3600000   # 1 hora
+  messaging:
+    rabbitmq:
+      exchange: registro-academico.exchange
+      estudiantes:
+        queue: registro-academico.estudiantes.registro
+        routing-key: estudiantes.registro
