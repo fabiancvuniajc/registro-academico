@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -32,4 +33,8 @@ public class EstudianteEntity {
 
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
+
+    // Relación uno-a-muchos: un estudiante tiene muchas matrículas
+    @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatriculaEntity> matriculas;
 }

@@ -2,14 +2,18 @@ package com.example.registroacademico.infrastructure.adapters.in.rest.controller
 
 import com.example.registroacademico.application.ports.in.EstudianteUseCase;
 import com.example.registroacademico.domain.models.Estudiante;
+import com.example.registroacademico.domain.models.Wrapper;
 import com.example.registroacademico.infrastructure.adapters.in.rest.dto.CreateEstudianteRequest;
 import com.example.registroacademico.infrastructure.adapters.in.rest.dto.EstudianteResponse;
 import com.example.registroacademico.infrastructure.adapters.in.rest.mappers.EstudianteMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,25 +38,34 @@ public class EstudianteController {
     @Operation(summary = "Consulta de estudiantes", description = "Consulta de estudiantes universitarios")
     @ApiResponse(responseCode = "200", description = "Consulta de estudiantes exitosa")
     @ApiResponse(responseCode = "503", description = "Error interno")
-    public ResponseEntity<List<EstudianteResponse>> listar() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Wrapper<EstudianteResponse>> listar(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "false") boolean refresh
+    ) {
+        Wrapper<Estudiante> wrapper = estudianteUseCase.listar(page, size, sortBy, refresh);
+
+        List<EstudianteResponse> response = estudianteUseCase.listar(page, size, sortBy, refresh)
+                .getResults()
+                .stream()
+                .map(EstudianteMapper.INSTANCE::toEstudianteResponse)
+                .toList();
+
+        Wrapper<EstudianteResponse> result = new Wrapper<>();
+        result.setResults(response);
+        result.setSize(wrapper.getSize());
+        result.setNumberOfElements(wrapper.getNumberOfElements());
+        result.setTotalElements(wrapper.getTotalElements());
+        result.setTotalPages(wrapper.getTotalPages());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(estudianteUseCase.listar()
-                        .stream()
-                        .map(EstudianteMapper.INSTANCE::toEstudianteResponse)
-                        /*.map(this::toEstudianteResponse)
-                        .map(estudiante -> {
-                            EstudianteResponse estudianteResponse = new EstudianteResponse();
-                            estudianteResponse.setNombre(estudiante.getNombre());
-                            estudianteResponse.setDocumento(estudiante.getDocumento());
-                            estudianteResponse.setEmail(estudiante.getEmail());
-                            return estudianteResponse;
-                        })*/
-                        .toList());
+                .body(result);
     }
 
     @PostMapping
-    public ResponseEntity<Estudiante> crear(@RequestBody CreateEstudianteRequest estudiante) {
+    public ResponseEntity<Estudiante> crear(@Valid @RequestBody CreateEstudianteRequest estudiante) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(estudianteUseCase.crear(
