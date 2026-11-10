@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/registro_taller
+    username: taller
+    password: taller
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      # Crea las tablas batch_* en la BD local del taller; cambiar a "never" tras el primer arranque.
+      initialize-schema: always
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+
+  rabbitmq:
+    addresses: localhost:5672
+    listener:
+      simple:
+        auto-startup: false
+
+app:
+  taller:
+    cron: "0 * * * * *"
+    zona: "UTC"
