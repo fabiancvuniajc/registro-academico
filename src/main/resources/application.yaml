@@ -27,6 +27,12 @@ spring:
       time-to-live: 600000
       cache-null-values: false
       use-key-prefix: true
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      # Crea las tablas batch_* en la BD local del taller; cambiar a "never" tras el primer arranque.
+      initialize-schema: always
 
   rabbitmq:
     addresses: amqps://clzapoxz:RsRbiNVq6Jf4zNe9-OwKzu_-0nxB819p@leopard.lmq.cloudamqp.com/clzapoxz
@@ -70,3 +76,6 @@ app:
       estudiantes:
         queue: registro-academico.estudiantes.registro
         routing-key: estudiantes.registro
+  taller:
+    cron: "0 * * * * *"
+    zona: "UTC"
