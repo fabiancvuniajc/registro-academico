@@ -41,8 +41,6 @@ public class CronService {
                 .addString("ejecucionId", UUID.randomUUID().toString())
                 .toJobParameters();
 
-
-
         jobLauncher.run(reportePeriodosJob, parametros);
     }
 }
