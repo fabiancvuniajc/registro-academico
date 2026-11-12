@@ -4,6 +4,10 @@ import com.example.registroacademico.infrastructure.adapters.out.persistence.ent
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+
 @Repository
 public interface PeriodoAcademicoJpaRepository extends JpaRepository<PeriodoAcademicoEntity, Integer> {
+
+    long countByEstadoAndFechaFinBefore(String estado, LocalDate fechaFin);
 }
