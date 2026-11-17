@@ -36,6 +36,12 @@ spring:
         retry:
           enabled: true
           max-attempts: 3
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      # Crea las tablas batch_* en la BD local del taller; cambiar a "never" tras el primer arranque.
+      initialize-schema: always
 
 #springdoc.swagger-ui.path=/swagger-ui.html
 #springdoc.swagger-ui.groups.enabled=true
@@ -69,3 +75,6 @@ app:
       estudiantes:
         queue: registro-academico.estudiantes.registro
         routing-key: estudiantes.registro
+  taller:
+    cron: "0 * * * * *" # Ejecutar cada minuto (Seg, Min, Hora, Día del Mes, Mes, Día de la Semana)
+    zona: "UTC"

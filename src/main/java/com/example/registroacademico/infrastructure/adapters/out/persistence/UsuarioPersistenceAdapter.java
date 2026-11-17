@@ -40,6 +40,7 @@ public class UsuarioPersistenceAdapter implements UsuarioRepository {
         return usuarioJpaRepository.existsByUsername(username);
     }
 
+    //trasladar a interface mapper para transformaciones
     private Usuario toUsuario(UsuarioEntity entity) {
         Usuario usuario = new Usuario();
         usuario.setId(entity.getId());

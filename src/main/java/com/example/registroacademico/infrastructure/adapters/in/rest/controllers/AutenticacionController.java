@@ -35,7 +35,7 @@ public class AutenticacionController {
     @PostMapping("/registro")
     @Operation(summary = "Registrar un nuevo usuario (rol ESTUDIANTE por defecto)")
     public ResponseEntity<Void> registrar(@Valid @RequestBody RegistroRequest request) {
-        autenticacionUseCase.registrar(request.getUsername(), request.getPassword(), request.getEmail());
+        autenticacionUseCase.registrar(request.getUsername(), request.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

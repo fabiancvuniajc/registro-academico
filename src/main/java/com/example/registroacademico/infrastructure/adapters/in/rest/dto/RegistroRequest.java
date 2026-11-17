@@ -18,8 +18,4 @@ public class RegistroRequest {
     @NotBlank
     @Size(min = 6, message = "El password debe tener al menos 6 caracteres")
     private String password;
-
-    @NotBlank
-    @Email
-    private String email;
 }

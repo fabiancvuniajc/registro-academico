@@ -39,7 +39,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding estudiantesRegistroBinding(Queue estudiantesRegistroQueue,
-                                               DirectExchange registroAcademicoExchange) {
+                                              DirectExchange registroAcademicoExchange) {
         return BindingBuilder.bind(estudiantesRegistroQueue)
                 .to(registroAcademicoExchange)
                 .with(estudiantesRoutingKey);
@@ -52,7 +52,7 @@ public class RabbitMQConfig {
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
-                                          Jackson2JsonMessageConverter messageConverter) {
+                                         Jackson2JsonMessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;

@@ -22,8 +22,8 @@ public class RabbitEstudianteMessagePublisherAdapter implements EstudianteMessag
     private final String routingKey;
 
     public RabbitEstudianteMessagePublisherAdapter(RabbitTemplate rabbitTemplate,
-            @Value("${app.messaging.rabbitmq.exchange}") String exchange,
-            @Value("${app.messaging.rabbitmq.estudiantes.routing-key}") String routingKey) {
+                                                   @Value("${app.messaging.rabbitmq.exchange}") String exchange,
+                                                   @Value("${app.messaging.rabbitmq.estudiantes.routing-key}") String routingKey) {
         this.rabbitTemplate = rabbitTemplate;
         this.exchange = exchange;
         this.routingKey = routingKey;

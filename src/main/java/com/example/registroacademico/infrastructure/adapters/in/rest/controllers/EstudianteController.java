@@ -45,35 +45,29 @@ public class EstudianteController {
     public ResponseEntity<Wrapper<EstudianteResponse>> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "false") boolean refresh
     ) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Wrapper<Estudiante> estudiantes = estudianteUseCase.listar(pageable);
-        Wrapper<EstudianteResponse> estudiantesResponse = new Wrapper<>(
-                estudiantes.getResults().stream()
-                        .map(EstudianteMapper.INSTANCE::toEstudianteResponse)
-                        .toList(),
-                estudiantes.getTotalElements(),
-                estudiantes.getTotalPages(),
-                estudiantes.getSize(),
-                estudiantes.getNumberOfElements()
-        );
-        return ResponseEntity.ok(estudiantesResponse);
-                        /*.map(this::toEstudianteResponse)
-                        .map(estudiante -> {
-                            EstudianteResponse estudianteResponse = new EstudianteResponse();
-                            estudianteResponse.setNombre(estudiante.getNombre());
-                            estudianteResponse.setDocumento(estudiante.getDocumento());
-                            estudianteResponse.setEmail(estudiante.getEmail());
-                            return estudianteResponse;
-                        }).toList());*/
+        Wrapper<Estudiante> wrapper = estudianteUseCase.listar(page, size, sortBy, refresh);
 
+        List<EstudianteResponse> list = wrapper.getResult().stream()
+                .map(EstudianteMapper.INSTANCE::toEstudianteResponse)
+                .toList();
+        Wrapper<EstudianteResponse> wrapperResponse = new Wrapper<>();
+        wrapperResponse.setResult(list);
+        wrapperResponse.setTotalElements(wrapper.getTotalElements());
+        wrapperResponse.setTotalPages(wrapper.getTotalPages());
+        wrapperResponse.setPage(wrapper.getPage());
+        wrapperResponse.setSize(wrapper.getSize());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(wrapperResponse);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Estudiante> crear(@Valid @RequestBody CreateEstudianteRequest estudiante) {
+    public ResponseEntity<Estudiante> crear(
+            @Valid @RequestBody CreateEstudianteRequest estudiante) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(estudianteUseCase.crear(
@@ -81,7 +75,6 @@ public class EstudianteController {
     }
 
     @GetMapping("/{documento}")
-    @PreAuthorize("hasRole('ADMIN','Estudiante','PROFESOR')")
     public ResponseEntity<Estudiante> buscar(@PathVariable String documento) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -90,7 +83,6 @@ public class EstudianteController {
     }
 
     @PutMapping("/{documento}")
-    @PreAuthorize("hasRole('ADMIN','Estudiante')")
     public ResponseEntity<Estudiante> actualizar(@PathVariable String documento,
                                                  @RequestBody Estudiante estudiante) {
         return ResponseEntity
@@ -99,7 +91,6 @@ public class EstudianteController {
     }
 
     @DeleteMapping("/{documento}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> borrar(@PathVariable String documento) {
         estudianteUseCase.borrar(documento);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -69,7 +69,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/matriculas/*/nota").hasAnyRole("ADMIN", "PROFESOR")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/matriculas/*/retirar").hasAnyRole("ADMIN", "ESTUDIANTE")
 
-                        .requestMatchers("/api/v1/estudiantes/**").hasAnyRole("ADMIN", "PROFESOR")
+                        .requestMatchers("/api/v1/estudiantes/**").hasAnyRole("ADMIN", "PROFESOR", "ESTUDIANTE")
 
                         // Cualquier otro endpoint requiere estar autenticado
                         .anyRequest().authenticated()

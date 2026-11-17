@@ -42,16 +42,16 @@ public class AutenticacionService implements AutenticacionUseCase {
     }
 
     @Override
-    public void registrar(String username, String password, String email) {
+    public void registrar(String username, String password) {
         if (usuarioRepository.existsByUsername(username)) {
             throw new ReglaDeNegocioException("El username ya está en uso");
         }
 
-        Usuario usuario = new Usuario();
-        usuario.setUsername(username);
-        usuario.setPassword(passwordEncoder.encode(password));
-        usuario.setEstado("ACTIVO");
-        usuario.setRol(Roles.ROLE_ESTUDIANTE.getId()); // rol por defecto
+        Usuario usuario = Usuario.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .estado("ACTIVO")
+                .rol(Roles.ROLE_ESTUDIANTE.getId()).build(); // rol por defecto
 
         usuarioRepository.save(usuario);
     }

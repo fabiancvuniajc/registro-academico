@@ -18,8 +18,8 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Configuration
-//@EnableCaching
+@Configuration
+@EnableCaching
 public class RedisCacheConfig {
 
     /**

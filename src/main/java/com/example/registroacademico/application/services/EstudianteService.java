@@ -7,39 +7,39 @@ import com.example.registroacademico.domain.models.Wrapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.time.Duration;
 
-
 @Service
 public class EstudianteService implements EstudianteUseCase {
 
-    private final EstudianteRepository estudianteRepository;
-    private static final String CACHE_KEY_ALL = "estudiantes:all";
     private static final Duration TTL = Duration.ofMinutes(15);
-
+    private final EstudianteRepository estudianteRepository;
     private final RedisTemplate<String, String> redisTemplate;
     private final Gson gson;
 
-    public EstudianteService(EstudianteRepository estudianteRepository,
-                             RedisTemplate<String, String> redisTemplate,
-                             Gson gson) {
-        this.gson = gson;
-        this.redisTemplate = redisTemplate;
+    public EstudianteService(EstudianteRepository estudianteRepository, RedisTemplate<String, String> redisTemplate, Gson gson) {
         this.estudianteRepository = estudianteRepository;
+        this.redisTemplate = redisTemplate;
+        this.gson = gson;
     }
 
+
+    /*@Override
+    @Cacheable(value = "estudiantes", key = "'all'", condition = "#refresh == false")
+    public Wrapper<Estudiante> listar(int page, int size, String sortBy, boolean refresh) {
+        return estudianteRepository.getAll(page, size, sortBy);
+    }*/
+
     @Override
-    //@Cacheable(value = "estudiantes", key = "'all'")
-    public Wrapper<Estudiante> listar(Pageable pageable) {
+    public Wrapper<Estudiante> listar(int page, int size, String sortBy, boolean refresh) {
         String valor = redisTemplate.opsForValue().get("todos_estudiantes");
 
-        if (valor == null) {
-            Wrapper<Estudiante> estudiantes = estudianteRepository.getAll(pageable);
+        if (valor == null || refresh) {
+            Wrapper<Estudiante> estudiantes = estudianteRepository.getAll(page, size, sortBy);
             String json = gson.toJson(estudiantes);
             redisTemplate.opsForValue().set("todos_estudiantes", json, TTL);
             return estudiantes;
@@ -51,11 +51,11 @@ public class EstudianteService implements EstudianteUseCase {
     @Override
     public Estudiante crear(Estudiante estudiante) {
         // aplicaria las reglas de negocio requeridas antes de ir a crear
-        return estudianteRepository.save(estudiante);
+        Estudiante result = estudianteRepository.save(estudiante);
+        return result;
     }
 
     @Override
-    @Cacheable(value = "estudiantes", key = "#documento")
     public Estudiante buscar(String documento) {
         return estudianteRepository.findByDocument(documento);
     }
