@@ -29,6 +29,7 @@ public class EstudianteEntity {
 
     @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
+
     private String estado;
 
     @Column(name = "fecha_creacion")
