@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:registro-academico-test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  # Infraestructura externa (Redis/RabbitMQ/Batch) no es necesaria para el flujo
+  # de autenticación/registro probado aquí; se excluye para que el contexto de
+  # test no intente conectarse a servicios remotos.
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration
+      - org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+      - org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration
+
+app:
+  security:
+    jwt:
+      secret: secreto-de-pruebas-min-256-bits-para-firmar-jwt-en-tests
+      expiration-ms: 3600000

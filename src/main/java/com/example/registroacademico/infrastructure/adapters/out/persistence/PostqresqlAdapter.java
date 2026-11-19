@@ -6,9 +6,7 @@ import com.example.registroacademico.domain.models.Estudiante;
 import com.example.registroacademico.domain.models.Wrapper;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.entities.EstudianteEntity;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.mappers.EstudianteMapper;
-import com.example.registroacademico.infrastructure.adapters.out.persistence.repositories.CursoJpaRepository;
 import com.example.registroacademico.infrastructure.adapters.out.persistence.repositories.EstudianteJpaRepository;
-import com.example.registroacademico.infrastructure.adapters.out.persistence.repositories.MatriculaJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +21,7 @@ public class PostqresqlAdapter implements EstudianteRepository {
 
     private final EstudianteJpaRepository estudianteJpaRepository;
 
-    public PostqresqlAdapter(EstudianteJpaRepository estudianteJpaRepository, CursoJpaRepository cursoJpaRepository, MatriculaJpaRepository matriculaJpaRepository) {
+    public PostqresqlAdapter(EstudianteJpaRepository estudianteJpaRepository) {
         this.estudianteJpaRepository = estudianteJpaRepository;
     }
 
